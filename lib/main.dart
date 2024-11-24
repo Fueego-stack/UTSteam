@@ -1,6 +1,11 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:aplikasi_pertamaku/loading.dart';
 import 'package:aplikasi_pertamaku/manga_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -14,7 +19,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyApp(),
+      home: LoadingScreen(),
     );
   }
 }
@@ -32,14 +37,16 @@ class MyApp extends StatelessWidget {
               iconTheme: const IconThemeData(color: Colors.white),
               backgroundColor: Colors.pink.shade400,
               centerTitle: true,
-              title: const Text('Home',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+              title: Text('Home',
+                  style: GoogleFonts.roboto(
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   )),
             ),
-            drawer: Drawer(
+            endDrawer: Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
@@ -75,16 +82,21 @@ class MyApp extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                      leading: const Icon(Icons.menu_book),
-                      title: const Text('Read Manga'),
+                      leading: const Icon(Icons.movie),
+                      title: const Text('Movie List'),
                       onTap: () {
                         Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const MangaScreen()));
+                            PageTransition(
+                                child: const MangaScreen(),
+                                type: PageTransitionType.scale,
+                                duration: const Duration(milliseconds: 600),
+                                reverseDuration:
+                                    const Duration(milliseconds: 600),
+                                alignment: Alignment.bottomCenter));
                       }),
                   ListTile(
-                    leading: const Icon(Icons.phone_android_outlined),
+                    leading: const Icon(FontAwesomeIcons.whatsapp),
                     title: const Text('WhatsApp'),
                     onTap: () async {
                       final Uri url =
@@ -97,9 +109,24 @@ class MyApp extends StatelessWidget {
                       }
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(FontAwesomeIcons.instagram),
+                    title: const Text('Instagram'),
+                    onTap: () async {
+                      final Uri url = Uri.parse(
+                          'https://www.instagram.com/chairilali_13?igsh=MTc3cTR0MG41bnZo');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url,
+                            mode: LaunchMode.externalApplication);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                  ),
                   const Divider(),
                   ListTile(
-                    leading: const Icon(Icons.logout),
+                    leading:
+                        const Icon(FontAwesomeIcons.personWalkingArrowLoopLeft),
                     title: const Text('Logout'),
                     onTap: () {
                       showDialog(
@@ -129,39 +156,42 @@ class MyApp extends StatelessWidget {
                 ],
               ),
             ),
-            body: const Center(
+            body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 75,
                     backgroundImage: AssetImage('assets/logo.jpg'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
-                  Text('Chairil Ali',
+                  const Text('Chairil Ali',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  const Text(
                     'Mobile Application Engineer',
                     style: TextStyle(
                         fontSize: 17,
                         fontStyle: FontStyle.italic,
                         color: Colors.grey),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                        "Flutter Developer that loves to learn new things. I'm currently working as a flutter developer at kompas Gramedia"),
+                    padding: const EdgeInsets.all(15.0),
+                    child: AnimatedTextKit(animatedTexts: [
+                      TyperAnimatedText(
+                          'Flutter Developer that loves to learn new things.',
+                          speed: const Duration(milliseconds: 60)),
+                    ], totalRepeatCount: 1, displayFullTextOnTap: true),
                   ),
                 ],
               ),

@@ -1,6 +1,10 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:lottie/lottie.dart';
 
 class MangaItem {
   final String title;
@@ -34,7 +38,7 @@ class _MangaScreenState extends State<MangaScreen> {
         backgroundColor: Colors.pink.shade400,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          'Manga List',
+          'Movie List',
           style: TextStyle(
             fontSize: 20,
             color: Colors.white,
@@ -45,18 +49,27 @@ class _MangaScreenState extends State<MangaScreen> {
           IconButton(
             color: Colors.white,
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
+            onPressed: () {
+              IconSnackBar.show(context,
+                  label: 'Notified', snackBarType: SnackBarType.success);
+            },
           )
         ],
       ),
       body: mangaList.isEmpty
-          ? const Center(
+          ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Belum Ada Manga yang ditambahkan!",
-                    style: TextStyle(fontSize: 18),
+                  Lottie.asset('assets/book.json', width: 200, height: 200),
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TyperAnimatedText('Belum ada film yang ditambahkan!',
+                          textStyle: const TextStyle(
+                            fontSize: 20,
+                          ))
+                    ],
+                    totalRepeatCount: 1,
                   ),
                 ],
               ),
@@ -205,7 +218,7 @@ class _MangaScreenState extends State<MangaScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'Tambah Manga Baru',
+                      'Tambah data baru',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -215,7 +228,7 @@ class _MangaScreenState extends State<MangaScreen> {
                     TextField(
                       controller: titleController,
                       decoration: const InputDecoration(
-                        labelText: 'Judul Manga',
+                        labelText: 'Judul film',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -252,7 +265,7 @@ class _MangaScreenState extends State<MangaScreen> {
                     TextField(
                       controller: storyController,
                       decoration: const InputDecoration(
-                        labelText: 'Cerita',
+                        labelText: 'Deskripsi',
                         border: OutlineInputBorder(),
                       ),
                       maxLines: 3,
